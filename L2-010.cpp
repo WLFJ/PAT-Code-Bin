@@ -1,27 +1,39 @@
-#incldue<iostream>
+#include<iostream>
+#include<string>
 using namespace std;
-const int MAXN = 100 + 10;
-int parent[2][MAXN];
-int Find(int k, int a){
-    if(parend[k + 1][a] == a) return a;
-    else return parent[k + 1][a] = Find(parent[k + 1][a]);
+const int MAXN = 1000 + 10;
+int zerr[MAXN][MAXN];
+int p[MAXN];
+string ans[] = {"OK", "No way", "No problem", "OK but..."};
+int Find(int a){
+    if(p[a] == a) return a;
+    else return p[a] = Find(p[a]);
 }
-int Union(int a, int b, int k){
-    a = Find(k, a), b = Find(k, b);
-    parent[k + 1][a] = b;
+void Union(int a, int b){
+    a = Find(a), b = Find(b);
+    p[a] = b;
+}
+bool check(int a, int b){
+    return Find(a) == Find(b);
 }
 int main(void){
-    /*
-    我们可以使用两个并差集维护其关系
-    */
-    for(int k = 0; k <= 1; k ++){
-        for(int i = 0; i < MAXN; i ++){
-            parent[k][i] = i;
-        }
+    for(int i = 0; i < MAXN; i ++){
+        p[i] = i;
     }
     int N, M, K;
     cin >> N >> M >> K;
-
+    while(M --){
+        int a, b, c;
+        cin >> a >> b >> c;
+        if(~c) Union(a, b);
+        else zerr[a][b] = zerr[b][a] = 1;
+    }
+    while(K --){
+        int a, b;
+        cin >> a >> b;
+        int status = (check(a, b) << 1) + (zerr[a][b]);
+        cout << ans[status] << endl;
+    }
 
     return 0;
 }
